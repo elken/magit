@@ -606,33 +606,33 @@ See `magit-commit-absorb' for an alternative implementation."
 (defun magit-commit-diff-1 ()
   (let ((rev nil)
         (arg "--cached")
-        (msg nil))
-    (pcase (magit-repository-local-get 'this-commit-command)
-      ((guard (eq this-command 'magit-diff-while-committing))
-       (if-let ((diff-buf (magit-get-mode-buffer 'magit-diff-mode 'selected)))
-           (with-current-buffer diff-buf
-             (cond ((and (equal magit-buffer-range "HEAD^")
-                         (equal magit-buffer-typearg "--cached"))
-                    )
-                   ((and (equal magit-buffer-range nil)
-                         (equal magit-buffer-typearg "--cached"))
-                    (setq rev "HEAD^"))
-                   ((magit-anything-staged-p)
-                    )
-                   (t
-                    (setq rev "HEAD^"))))
-         (unless (magit-anything-staged-p)
-           (setq rev "HEAD^"))))
-      (`magit-commit-commit
-       )
-      (`magit-commit--all
+        (msg nil)
+        (buffer (magit-get-mode-buffer 'magit-diff-mode 'selected))
+        (buffer-rev )
+        (buffer-arg )
+        (args (car (magit-diff-arguments)))
+        (command (magit-repository-local-get 'this-commit-command))
+        (staged (magit-anything-staged-p))
+        (unstaged (magit-anything-unstaged-p))
+        )
+    ;; - Since `magit-commit' doesn't let the user set pathspecs,
+    ;;   we do not try to deal with them here.
+    ;; - Since it is difficult (or even impossible for outside
+    ;;   invocations) to detect whether `--empty-commit' was used,
+    ;;   we ignore that possibility.  We might end up showing HEAD
+    ;;   instead of nothing.
+    (pcase (list staged unstaged command)
+      (`(nil nil _)
+       ;; Editing HEAD without any additions.
+       (setq rev "HEAD^..HEAD")
        (setq arg nil))
-      ((or `magit-commit-amend
-           `magit-commit-reword
-           `magit-rebase-reword-commit)
-       (setq rev "HEAD^"))
-      ((guard (not (magit-anything-staged-p)))
-       (setq rev "HEAD^")))
+      (`(nil t _)
+       )
+      )
+    ;; (when (and buffer
+    ;;            (equal rev buffer-rev)
+    ;;            (equal arg buffer-arg))
+    ;;   (setq msg t))
     (if msg
         (message (if (eq msg t) "No alternative diff" msg))
       (let ((magit-inhibit-save-previous-winconf 'unset)
@@ -642,7 +642,7 @@ See `magit-commit-absorb' for an alternative implementation."
         (when magit-commit-diff-inhibit-same-window
           (setq display-buffer-overriding-action
                 '(nil (inhibit-same-window t))))
-        (magit-diff-setup-buffer rev arg (car (magit-diff-arguments)) nil)))))
+        (magit-diff-setup-buffer rev arg args nil)))))
 
 (add-hook 'server-switch-hook #'magit-commit-diff)
 (add-hook 'with-editor-filter-visit-hook #'magit-commit-diff)

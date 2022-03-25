@@ -1851,23 +1851,25 @@ invisible."
 (defvar-local magit-section--opened-sections nil)
 
 (defun magit-section--open-temporarily (beg end)
-  (save-excursion
-    (goto-char beg)
-    (let ((section (magit-current-section)))
-      (while section
-        (let ((content (oref section content)))
-          (if (and (magit-section-invisible-p section)
-                   (<= (or content (oref section start))
-                       beg
-                       (oref section end)))
-              (progn
-                (when content
-                  (magit-section-show section)
-                  (push section magit-section--opened-sections))
-                (setq section (oref section parent)))
-            (setq section nil))))))
-  (or (eq search-invisible t)
-      (not (isearch-range-invisible beg end))))
+  (or (not (isearch-range-invisible beg end))
+      (and (eq search-invisible t)
+           (progn
+             (save-excursion
+               (goto-char beg)
+               (let ((section (magit-current-section)))
+                 (while section
+                   (let ((content (oref section content)))
+                     (if (and (magit-section-invisible-p section)
+                              (<= (or content (oref section start))
+                                  beg
+                                  (oref section end)))
+                         (progn
+                           (when content
+                             (magit-section-show section)
+                             (push section magit-section--opened-sections))
+                           (setq section (oref section parent)))
+                       (setq section nil))))))
+             (not (isearch-range-invisible beg end))))))
 
 (defun isearch-clean-overlays@magit-mode (fn)
   (if (derived-mode-p 'magit-mode)

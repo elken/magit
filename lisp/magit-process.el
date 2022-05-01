@@ -1102,8 +1102,6 @@ Limited by `magit-process-error-tooltip-max-lines'."
                 (forward-char 1))
               (point)))))))
 
-(defvar-local magit-this-error nil)
-
 (defvar magit-process-finish-apply-ansi-colors nil)
 
 (defun magit-process-finish (arg &optional process-buf command-buf

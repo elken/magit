@@ -544,35 +544,6 @@ Magit is documented in info node `(magit)'."
 
 ;;; Local Variables
 
-(defvar-local magit-buffer-arguments nil)
-(defvar-local magit-buffer-diff-args nil)
-(defvar-local magit-buffer-diff-files nil)
-(defvar-local magit-buffer-diff-files-suspended nil)
-(defvar-local magit-buffer-file-name nil)
-(defvar-local magit-buffer-files nil)
-(defvar-local magit-buffer-log-args nil)
-(defvar-local magit-buffer-log-files nil)
-(defvar-local magit-buffer-range nil)
-(defvar-local magit-buffer-range-hashed nil)
-(defvar-local magit-buffer-refname nil)
-(defvar-local magit-buffer-revision nil)
-(defvar-local magit-buffer-revision-hash nil)
-(defvar-local magit-buffer-revisions nil)
-(defvar-local magit-buffer-typearg nil)
-(defvar-local magit-buffer-upstream nil)
-
-;; These variables are also used in file-visiting buffers.
-;; Because the user may change the major-mode, they have
-;; to be permanent buffer-local.
-(put 'magit-buffer-file-name 'permanent-local t)
-(put 'magit-buffer-refname 'permanent-local t)
-(put 'magit-buffer-revision 'permanent-local t)
-(put 'magit-buffer-revision-hash 'permanent-local t)
-
-;; `magit-status' re-enables mode function but its refresher
-;; function does not reinstate this.
-(put 'magit-buffer-diff-files-suspended 'permanent-local t)
-
 (defvar-local magit-refresh-args nil
   "Obsolete.  Possibly the arguments used to refresh the current buffer.
 Some third-party packages might still use this, but Magit does not.")

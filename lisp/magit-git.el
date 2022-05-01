@@ -41,12 +41,6 @@
 (declare-function magit-get-mode-buffer "magit-mode"
                   (mode &optional value frame))
 (declare-function magit-refresh "magit-mode" ())
-(defvar magit-buffer-diff-args)
-(defvar magit-buffer-file-name)
-(defvar magit-buffer-log-args)
-(defvar magit-buffer-log-files)
-(defvar magit-buffer-refname)
-(defvar magit-buffer-revision)
 
 ;; From `magit-process'.
 (declare-function magit-call-git "magit-process" (&rest args))
@@ -56,7 +50,6 @@
 (declare-function magit-process-git "magit-process" (destination &rest args))
 (declare-function magit-process-insert-section "magit-process"
                   (pwd program args &optional errcode errlog))
-(defvar magit-this-error)
 (defvar magit-process-error-message-regexps)
 
 ;; From `magit-blame'.

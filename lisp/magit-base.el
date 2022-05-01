@@ -57,6 +57,11 @@
 (eval-when-compile (require 'which-func))
 (declare-function which-function "which-func" ())
 
+(eval-when-compile (require 'epa)) ; for `epa-protocol'
+(eval-when-compile (require 'epg))
+(declare-function epg-list-keys "epg" (context &optional name mode))
+(declare-function epg-decode-dn "epg" (alist))
+
 ;;; Options
 
 (defcustom magit-completing-read-function #'magit-builtin-completing-read

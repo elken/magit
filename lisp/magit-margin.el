@@ -30,7 +30,6 @@
 ;;; Code:
 
 (require 'magit-base)
-(require 'magit-transient)
 (require 'magit-mode)
 
 ;;; Options
@@ -53,8 +52,6 @@ does not carry to other options."
 (put 'magit-buffer-margin 'permanent-local t)
 
 (defvar-local magit-set-buffer-margin-refresh nil)
-
-(defvar magit--age-spec)
 
 ;;; Commands
 

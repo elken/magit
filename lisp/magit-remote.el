@@ -28,6 +28,8 @@
 
 (require 'magit)
 
+(declare-function magit-git-fetch "magit-fetch" (remote args))
+
 ;;; Options
 
 (defcustom magit-remote-add-set-remote.pushDefault 'ask-if-unset

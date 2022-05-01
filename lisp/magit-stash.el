@@ -27,7 +27,7 @@
 ;;; Code:
 
 (require 'magit)
-(require 'magit-reflog)
+(require 'magit-merge)
 (require 'magit-sequence)
 
 ;;; Options

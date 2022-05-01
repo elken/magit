@@ -26,27 +26,25 @@
 
 ;;; Code:
 
-(require 'magit-base)
-
 (require 'format-spec)
 
-;; From `magit-margin'.
+(require 'magit-base)
+
+;; For `magit-git-wash'
 (declare-function magit-maybe-make-margin-overlay "magit-margin" ())
 
-;; From `magit-mode'.
+;; For `magit-git-string-ng'
 (declare-function magit-get-mode-buffer "magit-mode"
                   (mode &optional value frame))
-(declare-function magit-refresh "magit-mode" ())
 
-;; From `magit-process'.
 (declare-function magit-call-git "magit-process" (&rest args))
 (declare-function magit-process-buffer "magit-process" (&optional nodisplay))
 (declare-function magit-process-file "magit-process"
                   (process &optional infile buffer display &rest args))
-(declare-function magit-process-git "magit-process" (destination &rest args))
+;; FIXME
+(autoload 'magit-process-git "magit-process")
 (declare-function magit-process-insert-section "magit-process"
                   (pwd program args &optional errcode errlog))
-(defvar magit-process-error-message-regexps)
 
 (eval-when-compile
   (cl-pushnew 'orig-rev eieio--known-slot-names)

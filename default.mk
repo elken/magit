@@ -50,57 +50,69 @@ HTMLDIRS  = $(filter-out git-commit,$(PACKAGES))
 PDFFILES  = $(addsuffix .pdf,$(filter-out git-commit,$(PACKAGES)))
 EPUBFILES = $(addsuffix .epub,$(filter-out git-commit,$(PACKAGES)))
 
-ELS  = git-commit.el
-ELS += magit-section.el
+ELS  = magit-section.el
 ELS += magit-base.el
+ELS += magit-git.el
 ifeq "$(BUILD_MAGIT_LIBGIT)" "true"
 ELS += magit-libgit.el
 endif
-ELS += magit-git.el
+
+ELS += git-commit.el
+ELS += magit-autorevert.el
 ELS += magit-mode.el
 ELS += magit-margin.el
 ELS += magit-process.el
 ELS += magit-transient.el
-ELS += magit-autorevert.el
 ELS += magit-core.el
+
 ELS += magit-diff.el
 ELS += magit-log.el
-ELS += magit-wip.el
 ELS += magit-reflog.el
+ELS += magit-wip.el
 ELS += magit-apply.el
-ELS += magit-repos.el
 ELS += magit.el
-ELS += magit-status.el
-ELS += magit-refs.el
+
 ELS += magit-files.el
+
+ELS += magit-notes.el
 ELS += magit-reset.el
 ELS += magit-branch.el
-ELS += magit-merge.el
-ELS += magit-tag.el
 ELS += magit-worktree.el
-ELS += magit-notes.el
-ELS += magit-obsolete.el
-ELS += magit-sequence.el
-ELS += magit-commit.el
+ELS += magit-refs.el
+ELS += magit-tag.el
+
 ELS += magit-remote.el
 ELS += magit-clone.el
 ELS += magit-fetch.el
 ELS += magit-pull.el
 ELS += magit-push.el
-ELS += magit-patch.el
-ELS += magit-bisect.el
+ELS += magit-sequence.el
+ELS += magit-commit.el
 ELS += magit-stash.el
+ELS += magit-merge.el
+
+ELS += magit-bisect.el
 ELS += magit-blame.el
+ELS += magit-bundle.el
+ELS += magit-ediff.el
+ELS += magit-gitignore.el
+ELS += magit-patch.el
+ELS += magit-repos.el
 ELS += magit-sparse-checkout.el
 ELS += magit-submodule.el
 ELS += magit-subtree.el
-ELS += magit-ediff.el
-ELS += magit-gitignore.el
-ELS += magit-bundle.el
+
 ELS += magit-extras.el
 ELS += git-rebase.el
+
 ELS += magit-bookmark.el
+
+ELS += magit-obsolete.el
+
+ELS += magit-status.el
+
 ELCS = $(ELS:.el=.elc)
+
 ELMS = magit.el $(filter-out $(addsuffix .el,$(PACKAGES)),$(ELS))
 ELGS = magit-autoloads.el magit-version.el
 

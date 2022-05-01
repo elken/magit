@@ -28,9 +28,7 @@
 
 ;;; Code:
 
-(require 'magit-core)
-
-(declare-function magit-status-setup-buffer "magit-status" (&optional directory))
+(require 'magit)
 
 (defvar x-stretch-cursor)
 

@@ -46,7 +46,7 @@
   #'magit-dispatch "Magit 3.0.0")
 
 (define-obsolete-function-alias 'magit-repolist-column-dirty
-  #'magit-repolist-column-flag "Magit 3.0.0")
+  'magit-repolist-column-flag "Magit 3.0.0")
 
 (define-obsolete-variable-alias 'magit-disable-line-numbers
   'magit-section-disable-line-numbers "Magit 3.0.0")

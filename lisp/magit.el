@@ -61,12 +61,12 @@
 ;;; Code:
 
 (require 'magit-core)
+
 (require 'magit-diff)
 (require 'magit-log)
+(require 'magit-reflog)
 (require 'magit-wip)
 (require 'magit-apply)
-(require 'magit-repos)
-(require 'git-commit)
 
 (require 'format-spec)
 (require 'package nil t) ; used in `magit-version'
@@ -748,37 +748,11 @@ For X11 something like ~/.xinitrc should work.\n"
 
 (provide 'magit)
 
-(cl-eval-when (load eval)
-  (require 'magit-status)
-  (require 'magit-refs)
-  (require 'magit-files)
-  (require 'magit-reset)
-  (require 'magit-branch)
-  (require 'magit-merge)
-  (require 'magit-tag)
-  (require 'magit-worktree)
-  (require 'magit-notes)
-  (require 'magit-sequence)
-  (require 'magit-commit)
-  (require 'magit-remote)
-  (require 'magit-clone)
-  (require 'magit-fetch)
-  (require 'magit-pull)
-  (require 'magit-push)
-  (require 'magit-bisect)
-  (require 'magit-stash)
-  (require 'magit-blame)
-  (require 'magit-obsolete)
-  (require 'magit-submodule)
-  (unless (load "magit-autoloads" t t)
-    (require 'magit-patch)
-    (require 'magit-subtree)
-    (require 'magit-ediff)
-    (require 'magit-gitignore)
-    (require 'magit-sparse-checkout)
-    (require 'magit-extras)
-    (require 'git-rebase)
-    (require 'magit-bookmark)))
+(require 'magit-obsolete)
+
+;; Some users manage to not load the autoloads file.
+;;;###autoload (provide 'magit-autoloads)
+;; TODO (unless (require 'magit-autoloads nil t) ...)
 
 (with-eval-after-load 'bookmark
   (require 'magit-bookmark))

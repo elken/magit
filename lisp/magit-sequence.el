@@ -29,9 +29,15 @@
 ;;; Code:
 
 (require 'magit)
+(require 'magit-branch)
+(require 'magit-pull)
+(require 'magit-remote)
 
-;; For `magit-rebase--todo'.
+;; For `magit-rebase--todo'
 (declare-function git-rebase-current-line "git-rebase" ())
+;; For `magit-rebase-continue'
+(declare-function magit-commit-amend-assert "magit-commit" (&optional commit))
+
 (eval-when-compile
   (cl-pushnew 'action-type eieio--known-slot-names)
   (cl-pushnew 'action eieio--known-slot-names)

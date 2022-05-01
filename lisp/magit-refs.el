@@ -27,6 +27,7 @@
 ;;; Code:
 
 (require 'magit)
+(require 'magit-branch)
 
 (declare-function magit-tag-delete "magit-tag" (tags))                       ;kb
 (declare-function magit-remote-rename "magit-remote" (old new))              ;kb

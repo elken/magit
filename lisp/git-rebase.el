@@ -72,6 +72,7 @@
 ;;; Code:
 
 (require 'magit)
+(require 'magit-stash)
 
 (require 'easymenu)
 (require 'server)

@@ -27,6 +27,7 @@
 ;;; Code:
 
 (require 'magit)
+(require 'magit-remote)
 
 (defvar magit-fetch-modules-jobs nil)
 (make-obsolete-variable

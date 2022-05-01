@@ -41,12 +41,7 @@
                   (rev prompt &optional default))
 (declare-function magit-rebase--get-state-lines "magit-sequence"
                   (file))
-(declare-function magit-show-commit "magit-diff"
-                  (arg1 &optional arg2 arg3 arg4))
 (declare-function magit-reflog-format-subject "magit-reflog" (subject))
-(defvar magit-refs-margin)
-(defvar magit-buffer-margin)
-(defvar magit-status-margin)
 
 (defvar magit-refs-focus-column-width) ; for magit-log-wash-rev
 (defvar magit-refs-show-commit-count)  ; for magit-log-wash-rev

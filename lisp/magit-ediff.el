@@ -27,6 +27,7 @@
 ;;; Code:
 
 (require 'magit)
+(require 'magit-files)
 
 (require 'ediff)
 (require 'smerge-mode)

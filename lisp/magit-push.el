@@ -27,6 +27,8 @@
 ;;; Code:
 
 (require 'magit)
+(require 'magit-notes)
+(require 'magit-remote)
 
 ;;; Commands
 

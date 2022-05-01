@@ -27,6 +27,7 @@
 ;;; Code:
 
 (require 'magit)
+(require 'magit-branch)
 
 ;;; Options
 

@@ -23,6 +23,7 @@
 ;;; Code:
 
 (require 'magit)
+(require 'magit-repos)
 
 (defvar x-stretch-cursor)
 

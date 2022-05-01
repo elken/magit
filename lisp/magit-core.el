@@ -29,13 +29,17 @@
 
 ;;; Code:
 
+(require 'git-commit)
+
 (require 'magit-base)
 (require 'magit-git)
+(require 'magit-autorevert)
 (require 'magit-mode)
 (require 'magit-margin)
 (require 'magit-process)
 (require 'magit-transient)
-(require 'magit-autorevert)
+
+(autoload 'magit-status-setup-buffer "magit-status")
 
 (when (magit--libgit-available-p)
   (condition-case err

@@ -27,9 +27,8 @@
 ;;; Code:
 
 (require 'magit)
-(require 'magit-diff)
-
-(declare-function magit-git-push "magit-push" (branch target args))
+(require 'magit-branch)
+(require 'magit-push)
 
 ;;; Commands
 

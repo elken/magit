@@ -28,6 +28,13 @@
 
 (require 'magit)
 
+(require 'magit-bisect)
+(require 'magit-merge)
+(require 'magit-repos)
+(require 'magit-sequence)
+(require 'magit-stash)
+(require 'magit-worktree)
+
 ;;; Options
 
 (defgroup magit-status nil

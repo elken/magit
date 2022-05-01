@@ -27,6 +27,8 @@
 ;;; Code:
 
 (require 'magit)
+(require 'magit-status)
+(require 'magit-remote)
 
 ;;; Options
 

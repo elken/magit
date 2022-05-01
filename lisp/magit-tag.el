@@ -27,6 +27,7 @@
 ;;; Code:
 
 (require 'magit)
+(require 'magit-refs)
 
 ;; For `magit-tag-delete'.
 (defvar helm-comp-read-use-marked)

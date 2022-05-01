@@ -27,10 +27,16 @@
 ;;; Code:
 
 (require 'magit)
+(require 'magit-bisect)
+(require 'magit-blame)
+(require 'magit-commit)
+(require 'magit-merge)
+(require 'magit-sequence)
+(require 'magit-status)
 
-;; For `magit-do-async-shell-command'.
+;; For `magit-do-async-shell-command'
 (declare-function dired-read-shell-command "dired-aux" (prompt arg files))
-;; For `magit-project-status'.
+;; For `magit-project-status'
 (declare-function vc-git-command "vc-git"
                   (buffer okstatus file-or-list &rest flags))
 

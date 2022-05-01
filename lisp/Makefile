@@ -9,62 +9,81 @@ all: lisp
 
 ## Build order #######################################################
 
-git-commit.elc:
 magit-section.elc:
 magit-base.elc:            magit-section.elc
-ifeq "$(BUILD_MAGIT_LIBGIT)" "true"
-magit-libgit.elc:
-magit-git.elc:             magit-base.elc magit-libgit.elc
-else
 magit-git.elc:             magit-base.elc
+# FIXME                    magit-process magit-mode (magit-margin)
+ifeq "$(BUILD_MAGIT_LIBGIT)" "true"
+magit-libgit.elc:          magit-git.elc
 endif
-magit-mode.elc:            magit-base.elc magit-git.elc
-magit-margin.elc:          magit-base.elc magit-mode.elc
+
+git-commit.elc:            magit-base.elc magit-git.elc
+magit-autorevert.elc:      magit-base.elc magit-git.elc
+magit-mode.elc:            magit-base.elc magit-git.elc \
+                           git-commit.elc magit-autorevert.elc
+# FIXME                    magit-process magit-diff magit-status magit-bookmark
+magit-margin.elc:          magit-base.elc magit-git.elc magit-mode.elc
 magit-process.elc:         magit-base.elc magit-git.elc magit-mode.elc
-magit-transient.elc:       magit-git.elc magit-mode.elc magit-process.elc
-magit-autorevert.elc:      magit-git.elc magit-process.elc
-magit-core.elc:            magit-base.elc magit-git.elc magit-mode.elc \
-                           magit-margin.elc magit-process.elc \
-                           magit-transient.elc magit-autorevert.elc
-magit-diff.elc:            git-commit.elc magit-core.elc
+magit-transient.elc:       magit-base.elc magit-git.elc magit-mode.elc magit-process.elc
+magit-core.elc:            magit-base.elc magit-git.elc magit-mode.elc magit-process.elc \
+                           git-commit.elc magit-autorevert.elc \
+                           magit-margin.elc magit-transient.elc
+
+magit-diff.elc:            magit-core.elc
+# FIXME                    magit-stash magit-files magit-commit git-rebase
+# FIXME                    magit-merge magit-log
 magit-log.elc:             magit-core.elc magit-diff.elc
-magit-wip.elc:             magit-core.elc magit-log.elc
 magit-reflog.elc:          magit-core.elc magit-log.elc
+magit-wip.elc:             magit-core.elc magit-log.elc
 magit-apply.elc:           magit-core.elc magit-diff.elc magit-wip.elc
-magit-repos.elc:           magit-core.elc
-magit.elc:                 git-commit.elc magit-core.elc magit-diff.elc \
-                           magit-log.elc magit-apply.elc magit-repos.elc
-magit-status.elc:          magit.elc
-magit-refs.elc:            magit.elc
+# FIXME                    magit-sequence magit-patch magit-merge magit-submodule
+magit.elc:                 magit-core.elc magit-diff.elc magit-log.elc \
+                           magit-reflog.elc magit-wip.elc magit-apply.elc
+
 magit-files.elc:           magit.elc
+
+magit-notes.elc:           magit.elc
 magit-reset.elc:           magit.elc
 magit-branch.elc:          magit.elc magit-reset.elc
-magit-merge.elc:           magit.elc magit-diff.elc
-magit-tag.elc:             magit.elc
-magit-worktree.elc:        magit.elc
-magit-notes.elc:           magit.elc
-magit-sequence.elc:        magit.elc
-magit-commit.elc:          magit.elc magit-sequence.elc
+magit-worktree.elc:        magit.elc magit-branch.elc
+magit-refs.elc:            magit.elc magit-branch.elc
+magit-tag.elc:             magit.elc magit-refs.elc
+
 magit-remote.elc:          magit.elc
-magit-clone.elc:           magit.elc
-magit-fetch.elc:           magit.elc
+# FIXME                    magit-fetch
+magit-clone.elc:           magit.elc magit-remote.elc magit-status.elc
+magit-fetch.elc:           magit.elc magit-remote.elc
 magit-pull.elc:            magit.elc magit-remote.elc
-magit-push.elc:            magit.elc
-magit-bisect.elc:          magit.elc
-magit-stash.elc:           magit.elc magit-sequence.elc magit-reflog.elc
-magit-blame.elc:           magit.elc
-magit-obsolete.elc:        magit.elc
-magit-submodule.elc:       magit.elc
-magit-patch.elc:           magit.elc
-magit-subtree.elc:         magit.elc
-magit-ediff.elc:           magit.elc
-magit-gitignore.elc:       magit.elc
-magit-sparse-checkout.elc: magit.elc
+magit-push.elc:            magit.elc magit-remote.elc magit-notes.elc
+magit-sequence.elc:        magit.elc magit-remote.elc magit-pull.elc magit-branch.elc
+# FIXME                    git-rebase magit-commit
+magit-commit.elc:          magit.elc magit-sequence.elc
+magit-merge.elc:           magit.elc magit-branch.elc magit-push.elc
+magit-stash.elc:           magit.elc magit-sequence.elc magit-merge.elc
+
+magit-bisect.elc:          magit.elc                     # +sections
+magit-blame.elc:           magit.elc magit-files.elc
 magit-bundle.elc:          magit.elc
-magit-extras.elc:          magit.elc magit-merge.elc
-git-rebase.elc:            magit.elc
+magit-ediff.elc:           magit.elc magit-files.elc
+magit-gitignore.elc:       magit.elc magit-files.elc
+magit-patch.elc:           magit.elc magit-notes.elc
+magit-sparse-checkout.elc: magit.elc                     # +sections
+magit-repos.elc:           magit.elc
+magit-submodule.elc:       magit.elc magit-repos.elc     # +sections
+magit-subtree.elc:         magit.elc
+
+magit-extras.elc:          magit.elc magit-bisect.elc magit-blame.elc \
+                           magit-commit.elc magit-merge.elc magit-sequence.elc \
+                           magit-status.elc
+git-rebase.elc:            magit.elc magit-stash.elc
+
 magit-bookmark.elc:        magit.elc
-magit-obsolete.elc:        magit.elc
+
+magit-obsolete.elc:        magit.elc # (magit-repos)
+
+magit-status.elc:          magit.elc magit-bisect.elc magit-merge.elc \
+                           magit-repos.elc magit-sequence.elc \
+                           magit-stash.elc magit-worktree.elc
 
 ## Build #############################################################
 

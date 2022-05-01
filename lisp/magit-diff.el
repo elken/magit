@@ -78,10 +78,6 @@
 (declare-function magit-add-change-log-entry-other-window "magit-extras"
                   (&optional whoami file-name))
 (declare-function magit-diff-edit-hunk-commit "magit-extras" (file))
-(declare-function magit-smerge-keep-current "magit-apply" ())
-(declare-function magit-smerge-keep-upper "magit-apply" ())
-(declare-function magit-smerge-keep-base "magit-apply" ())
-(declare-function magit-smerge-keep-lower "magit-apply" ())
 
 (eval-when-compile
   (cl-pushnew 'orig-rev eieio--known-slot-names)
@@ -3444,6 +3440,60 @@ last (visual) lines of the region."
         (diff-fixup-modifs (point-min) (point-max))
         (setq patch (buffer-string))))
     patch))
+
+;;; Smerge Support
+
+(defun magit-smerge-keep-current ()
+  "Keep the current version of the conflict at point."
+  (interactive)
+  (magit-call-smerge #'smerge-keep-current))
+
+(defun magit-smerge-keep-upper ()
+  "Keep the upper/our version of the conflict at point."
+  (interactive)
+  (magit-call-smerge #'smerge-keep-upper))
+
+(defun magit-smerge-keep-base ()
+  "Keep the base version of the conflict at point."
+  (interactive)
+  (magit-call-smerge #'smerge-keep-base))
+
+(defun magit-smerge-keep-lower ()
+  "Keep the lower/their version of the conflict at point."
+  (interactive)
+  (magit-call-smerge #'smerge-keep-lower))
+
+(defun magit-call-smerge (fn)
+  (pcase-let* ((file (magit-file-at-point t t))
+               (keep (get-file-buffer file))
+               (`(,buf ,pos)
+                (let ((magit-diff-visit-jump-to-change nil))
+                  (magit-diff-visit-file--noselect file))))
+    (with-current-buffer buf
+      (save-excursion
+        (save-restriction
+          (unless (<= (point-min) pos (point-max))
+            (widen))
+          (goto-char pos)
+          (condition-case nil
+              (smerge-match-conflict)
+            (error
+             (if (eq fn #'smerge-keep-current)
+                 (when (eq this-command #'magit-discard)
+                   (re-search-forward smerge-begin-re nil t)
+                   (setq fn
+                         (magit-read-char-case "Keep side: " t
+                           (?o "[o]urs/upper"   #'smerge-keep-upper)
+                           (?b "[b]ase"         #'smerge-keep-base)
+                           (?t "[t]heirs/lower" #'smerge-keep-lower))))
+               (re-search-forward smerge-begin-re nil t))))
+          (funcall fn)))
+      (when (and keep (magit-anything-unmerged-p file))
+        (smerge-start-session))
+      (save-buffer))
+    (unless keep
+      (kill-buffer buf))
+    (magit-refresh)))
 
 ;;; _
 (provide 'magit-diff)

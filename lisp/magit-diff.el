@@ -61,23 +61,24 @@
 (declare-function ansi-color-apply-on-region "ansi-color")
 ;; For `magit-diff-wash-submodule'
 (declare-function magit-log-wash-log "magit-log" (style args))
+
 ;; For keymaps and menus
-(declare-function magit-apply "magit-apply" (&rest args))
-(declare-function magit-stage "magit-apply" (&optional indent))
-(declare-function magit-unstage "magit-apply" ())
-(declare-function magit-discard "magit-apply" ())
-(declare-function magit-reverse "magit-apply" (&rest args))
-(declare-function magit-file-rename "magit-files" (file newname))
-(declare-function magit-file-untrack "magit-files" (files &optional force))
-(declare-function magit-commit-add-log "magit-commit" ())
-(declare-function magit-diff-trace-definition "magit-log" ())
-(declare-function magit-patch-save "magit-patch" (files &optional arg))
-(declare-function magit-do-async-shell-command "magit-extras" (file))
-(declare-function magit-add-change-log-entry "magit-extras"
+(declare-function magit-apply "magit-apply" (&rest args))                    ;kb
+(declare-function magit-stage "magit-apply" (&optional indent))              ;kb
+(declare-function magit-unstage "magit-apply" ())                            ;kb
+(declare-function magit-discard "magit-apply" ())                            ;kb
+(declare-function magit-reverse "magit-apply" (&rest args))                  ;kb
+(declare-function magit-file-rename "magit-files" (file newname))            ;kb
+(declare-function magit-file-untrack "magit-files" (files &optional force))  ;kb
+(declare-function magit-commit-add-log "magit-commit" ())                    ;kb
+(declare-function magit-diff-trace-definition "magit-log" ())                ;kb
+(declare-function magit-patch-save "magit-patch" (files &optional arg))      ;kb
+(declare-function magit-do-async-shell-command "magit-extras" (file))        ;kb
+(declare-function magit-add-change-log-entry "magit-extras"                  ;kb
                   (&optional whoami file-name other-window))
-(declare-function magit-add-change-log-entry-other-window "magit-extras"
+(declare-function magit-add-change-log-entry-other-window "magit-extras"     ;kb
                   (&optional whoami file-name))
-(declare-function magit-diff-edit-hunk-commit "magit-extras" (file))
+(declare-function magit-diff-edit-hunk-commit "magit-extras" (file))         ;kb
 
 (eval-when-compile
   (cl-pushnew 'orig-rev eieio--known-slot-names)

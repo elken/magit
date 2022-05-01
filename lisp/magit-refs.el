@@ -28,6 +28,10 @@
 
 (require 'magit)
 
+(declare-function magit-tag-delete "magit-tag" (tags))                       ;kb
+(declare-function magit-remote-rename "magit-remote" (old new))              ;kb
+(declare-function magit-remote-remove "magit-remote" (remote))               ;kb
+
 ;;; Options
 
 (defgroup magit-refs nil

@@ -44,12 +44,13 @@
 (declare-function magit-show-commit "magit-diff"
                   (arg1 &optional arg2 arg3 arg4))
 (declare-function magit-reflog-format-subject "magit-reflog" (subject))
-(defvar magit-refs-focus-column-width)
 (defvar magit-refs-margin)
-(defvar magit-refs-show-commit-count)
 (defvar magit-buffer-margin)
 (defvar magit-status-margin)
-(defvar magit-status-sections-hook)
+
+(defvar magit-refs-focus-column-width) ; for magit-log-wash-rev
+(defvar magit-refs-show-commit-count)  ; for magit-log-wash-rev
+(defvar magit-status-sections-hook)    ; for magit--insert-pushremote-log-p
 
 (require 'ansi-color)
 (require 'crm)

@@ -325,9 +325,11 @@ to `magit-dispatch'."
   (let ((map (make-sparse-keymap)))
     (define-key map "p" #'magit-blob-previous)
     (define-key map "n" #'magit-blob-next)
-    (define-key map "b" #'magit-blame-addition)
-    (define-key map "r" #'magit-blame-removal)
-    (define-key map "f" #'magit-blame-reverse)
+    ;; These are defined in "magit-blame" using `transient-define-prefix',
+    ;; which `check-declare' doesn't know about.  So we cannot #'quote.
+    (define-key map "b"  'magit-blame-addition)
+    (define-key map "r"  'magit-blame-removal)
+    (define-key map "f"  'magit-blame-reverse)
     (define-key map "q" #'magit-kill-this-buffer)
     map)
   "Keymap for `magit-blob-mode'.")

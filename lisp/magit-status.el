@@ -375,6 +375,18 @@ init file: (global-set-key (kbd \"C-x g\") 'magit-status-quick)."
      :if (lambda () (memq 'magit-insert-skip-worktree-files magit-status-sections-hook)))]
    [("i" "Using Imenu" imenu)]])
 
+;;;###autoload
+(defun magit-dired-jump (&optional other-window)
+  "Visit file at point using Dired.
+With a prefix argument, visit in another window.  If there
+is no file at point, then instead visit `default-directory'."
+  (interactive "P")
+  (dired-jump other-window
+              (and-let* ((file (magit-file-at-point)))
+                (expand-file-name (if (file-directory-p file)
+                                      (file-name-as-directory file)
+                                    file)))))
+
 (define-derived-mode magit-status-mode magit-mode "Magit"
   "Mode for looking at Git status.
 

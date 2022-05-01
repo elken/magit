@@ -245,18 +245,6 @@ to nil before loading Magit to prevent \"m\" from being bound.")
     (add-to-list 'project-switch-commands '(magit-project-status "Magit") t)))
 
 ;;;###autoload
-(defun magit-dired-jump (&optional other-window)
-  "Visit file at point using Dired.
-With a prefix argument, visit in another window.  If there
-is no file at point, then instead visit `default-directory'."
-  (interactive "P")
-  (dired-jump other-window
-              (and-let* ((file (magit-file-at-point)))
-                (expand-file-name (if (file-directory-p file)
-                                      (file-name-as-directory file)
-                                    file)))))
-
-;;;###autoload
 (defun magit-dired-log (&optional follow)
   "Show log for all marked files, or the current file."
   (interactive "P")

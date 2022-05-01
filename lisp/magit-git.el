@@ -30,10 +30,6 @@
 
 (require 'format-spec)
 
-;; From `magit-branch'.
-(defvar magit-branch-prefer-remote-upstream)
-(defvar magit-published-branches)
-
 ;; From `magit-margin'.
 (declare-function magit-maybe-make-margin-overlay "magit-margin" ())
 
@@ -93,6 +89,7 @@ Use the function by the same name instead of this variable.")
     'git))
 
 ;;; Options
+;;;; Git Options
 
 ;; For now this is shared between `magit-process' and `magit-git'.
 (defgroup magit-process nil
@@ -195,6 +192,8 @@ purpose."
   :group 'magit-process
   :type '(repeat string))
 
+;;;; Remote Options
+
 (defcustom magit-prefer-remote-upstream nil
   "Whether to favor remote branches when reading the upstream branch.
 
@@ -208,6 +207,123 @@ that change the upstream and many that create new branches."
   :package-version '(magit . "2.4.2")
   :group 'magit-commands
   :type 'boolean)
+
+;;;; Branch Options
+
+(defcustom magit-branch-prefer-remote-upstream nil
+  "Whether to favor remote upstreams when creating new branches.
+
+When a new branch is created, then the branch, commit, or stash
+at point is suggested as the default starting point of the new
+branch, or if there is no such revision at point the current
+branch.  In either case the user may choose another starting
+point.
+
+If the chosen starting point is a branch, then it may also be set
+as the upstream of the new branch, depending on the value of the
+Git variable `branch.autoSetupMerge'.  By default this is done
+for remote branches, but not for local branches.
+
+You might prefer to always use some remote branch as upstream.
+If the chosen starting point is (1) a local branch, (2) whose
+name matches a member of the value of this option, (3) the
+upstream of that local branch is a remote branch with the same
+name, and (4) that remote branch can be fast-forwarded to the
+local branch, then the chosen branch is used as starting point,
+but its own upstream is used as the upstream of the new branch.
+
+Members of this option's value are treated as branch names that
+have to match exactly unless they contain a character that makes
+them invalid as a branch name.  Recommended characters to use
+to trigger interpretation as a regexp are \"*\" and \"^\".  Some
+other characters which you might expect to be invalid, actually
+are not, e.g. \".+$\" are all perfectly valid.  More precisely,
+if `git check-ref-format --branch STRING' exits with a non-zero
+status, then treat STRING as a regexp.
+
+Assuming the chosen branch matches these conditions you would end
+up with with e.g.:
+
+  feature --upstream--> origin/master
+
+instead of
+
+  feature --upstream--> master --upstream--> origin/master
+
+Which you prefer is a matter of personal preference.  If you do
+prefer the former, then you should add branches such as \"master\",
+\"next\", and \"maint\" to the value of this options."
+  :package-version '(magit . "2.4.0")
+  :group 'magit-commands
+  :type '(repeat string))
+
+(defcustom magit-branch-adjust-remote-upstream-alist nil
+  "Alist of upstreams to be used when branching from remote branches.
+
+When creating a local branch from an ephemeral branch located
+on a remote, e.g. a feature or hotfix branch, then that remote
+branch should usually not be used as the upstream branch, since
+the push-remote already allows accessing it and having both the
+upstream and the push-remote reference the same related branch
+would be wasteful.  Instead a branch like \"maint\" or \"master\"
+should be used as the upstream.
+
+This option allows specifying the branch that should be used as
+the upstream when branching certain remote branches.  The value
+is an alist of the form ((UPSTREAM . RULE)...).  The first
+element is used whose UPSTREAM exists and whose RULE matches
+the name of the new branch.  Subsequent elements are ignored.
+
+UPSTREAM is the branch to be used as the upstream for branches
+specified by RULE.  It can be a local or a remote branch.
+
+RULE can either be a regular expression, matching branches whose
+upstream should be the one specified by UPSTREAM.  Or it can be
+a list of the only branches that should *not* use UPSTREAM; all
+other branches will.  Matching is done after stripping the remote
+part of the name of the branch that is being branched from.
+
+If you use a finite set of non-ephemeral branches across all your
+repositories, then you might use something like:
+
+  ((\"origin/master\" . (\"master\" \"next\" \"maint\")))
+
+Or if the names of all your ephemeral branches contain a slash,
+at least in some repositories, then a good value could be:
+
+  ((\"origin/master\" . \"/\"))
+
+Of course you can also fine-tune:
+
+  ((\"origin/maint\" . \"\\\\\\=`hotfix/\")
+   (\"origin/master\" . \"\\\\\\=`feature/\"))
+
+UPSTREAM can be a local branch:
+
+  ((\"master\" . (\"master\" \"next\" \"maint\")))
+
+Because the main branch is no longer almost always named \"master\"
+you should also account for other common names:
+
+  ((\"main\"  . (\"main\" \"master\" \"next\" \"maint\"))
+   (\"master\" . (\"main\" \"master\" \"next\" \"maint\")))
+
+If you use remote branches as UPSTREAM, then you might also want
+to set `magit-branch-prefer-remote-upstream' to a non-nil value.
+However, I recommend that you use local branches as UPSTREAM."
+  :package-version '(magit . "2.9.0")
+  :group 'magit-commands
+  :type '(repeat (cons (string :tag "Use upstream")
+                       (choice :tag "for branches"
+                               (regexp :tag "matching")
+                               (repeat :tag "except"
+                                       (string :tag "branch"))))))
+
+(defcustom magit-published-branches '("origin/master")
+  "List of branches that are considered to be published."
+  :package-version '(magit . "2.13.0")
+  :group 'magit-commands
+  :type '(repeat string))
 
 (defcustom magit-list-refs-namespaces
   '("refs/heads"
@@ -245,7 +361,7 @@ to `magit-completing-read' or, for commands that support reading
 multiple strings, `read-from-minibuffer'.  The completion
 framework ultimately determines how the collection is displayed."
   :package-version '(magit . "2.11.0")
-  :group 'magit-miscellaneous
+  :group 'magit-commands
   :type '(choice string (repeat string)))
 
 ;;; Git

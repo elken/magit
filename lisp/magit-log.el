@@ -1020,6 +1020,8 @@ Type \\[magit-reset] to reset `HEAD' to the commit at point.
 \\{magit-log-mode-map}"
   :group 'magit-log
   (hack-dir-local-variables-non-file-buffer)
+  (add-hook 'magit-section-movement-hook
+            #'magit-maybe-update-revision-buffer nil t)
   (setq magit--imenu-item-types 'commit))
 
 (put 'magit-log-mode 'magit-log-default-arguments
@@ -1423,15 +1425,7 @@ exists mostly for backward compatibility reasons."
 
 (defvar magit--update-revision-buffer nil)
 
-(defun magit-log-maybe-update-revision-buffer (&optional _)
-  "When moving in a log or cherry buffer, update the revision buffer.
-If there is no revision buffer in the same frame, then do nothing."
-  (when (derived-mode-p 'magit-log-mode 'magit-cherry-mode 'magit-reflog-mode)
-    (magit--maybe-update-revision-buffer)))
-
-(add-hook 'magit-section-movement-hook #'magit-log-maybe-update-revision-buffer)
-
-(defun magit--maybe-update-revision-buffer ()
+(defun magit-maybe-update-revision-buffer ()
   (when-let* ((commit (magit-section-value-if 'commit))
               (buffer (magit-get-mode-buffer 'magit-revision-mode nil t)))
     (if magit--update-revision-buffer
@@ -1451,13 +1445,7 @@ If there is no revision buffer in the same frame, then do nothing."
 
 (defvar magit--update-blob-buffer nil)
 
-(defun magit-log-maybe-update-blob-buffer (&optional _)
-  "When moving in a log or cherry buffer, update the blob buffer.
-If there is no blob buffer in the same frame, then do nothing."
-  (when (derived-mode-p 'magit-log-mode 'magit-cherry-mode 'magit-reflog-mode)
-    (magit--maybe-update-blob-buffer)))
-
-(defun magit--maybe-update-blob-buffer ()
+(defun magit-maybe-update-blob-buffer ()
   (when-let* ((commit (magit-section-value-if 'commit))
               (buffer (--first (with-current-buffer it
                                  (eq revert-buffer-function
